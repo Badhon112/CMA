@@ -2,6 +2,12 @@ import express, { Request, Response } from "express";
 import { validate } from "../../middleware/validate_middleware";
 import { contractValidator } from "../../validators/Contract_validator";
 import User from "../../model/users";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+});
 
 const router = express.Router();
 
@@ -23,22 +29,30 @@ router.route("/getAllUser").get(async (req: Request, res: Response) => {
 
 router
   .route("/create")
-  .post(validate(contractValidator), async (req: Request, res: Response) => {
-    try {
-      const { name, email, phone, address, photourl } = await req.body;
-      let user = await User.findOne({
-        email,
-      });
-      if (user) {
-        return res.status(400).json({ msg: "User Already exists" });
+  .post(
+    validate(contractValidator),
+    upload.array("photourl"),
+    async (req: Request, res: Response) => {
+      try {
+        if (!req.files || Object.keys(req.files).length === 0) {
+          return res.status(400).json({ msg: "User Image Error" });
+        }
+        // const { avater } = req.files;
+        const { name, email, phone, address } = await req.body;
+        let user = await User.findOne({
+          email,
+        });
+        if (user) {
+          return res.status(400).json({ msg: "User Already exists" });
+        }
+        user = new User({ name, email, phone, address });
+        await user.save();
+        return res.status(200).send({ msg: "User Registerd Ok" });
+      } catch (error) {
+        res.status(404).json({ msg: "Error While Creating", error });
       }
-      user = new User({ name, email, phone, address, photourl });
-      await user.save();
-      return res.status(200).send({ msg: "User Registerd Ok" });
-    } catch (error) {
-      res.status(404).json({ msg: "Error While Creating", error });
     }
-  });
+  );
 
 router.route("/delete/:id").delete(async (req: Request, res: Response) => {
   try {
@@ -69,16 +83,6 @@ router
   .put(validate(contractValidator), async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      // const { name, email, phone, address, photourl } = await req.body;
-      // let user = await User.findById({
-      //   _id: id,
-      // });
-      // if (!user) {
-      //   return res.status(400).json({ msg: "User dosn't exists" });
-      // }
-      // let newuser = new User({ name, email, phone, address, photourl });
-      // user = await User.findByIdAndUpdate(id, newuser);
-      // return res.status(200).send({ msg: "User Updated succefully" });
       const user = await User.findByIdAndUpdate({ _id: id }, req.body, {
         new: true,
       });

@@ -6,7 +6,7 @@ export type UserType = {
   email: string;
   phone: string;
   address: string;
-  photourl: string;
+  avater: { public_url: String; url: String };
 };
 
 const userSchema = new mongoose.Schema<UserType>({
@@ -30,10 +30,13 @@ const userSchema = new mongoose.Schema<UserType>({
     require: true,
     unique: true,
   },
-  photourl: {
-    type: String,
-    require: true,
-    unique: true,
+  avater: {
+    public_url: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
   },
 });
 

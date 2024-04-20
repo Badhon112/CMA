@@ -9,7 +9,7 @@ interface formData {
   email: string;
   phone: string;
   address: string;
-  photourl: string;
+  photourl: "";
 }
 const AddContacts = () => {
   const navigate = useNavigate();
@@ -20,12 +20,36 @@ const AddContacts = () => {
     address: "",
     photourl: "",
   });
+  const present_key = "895738473725787";
+  const cloud_name = "dssk1gapb";
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File>();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
+  // const UploadFile=async(type)=>{
+  //   k
+  // }
+
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    const selectedFiles = files as FileList;
+    setSelectedImage(selectedFiles?.[0]);
+    // console.log(selectedImage);
+    const formData = new FormData();
+    formData.append("file", selectedFiles?.[0]);
+    formData.append("upload_preset", present_key);
+    axios.post(``)
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
+      setLoading(true);
+      // const imgUrl=await UploadFile("image")
+      console.log(formdata);
+
       const res = await axios.post(
         "http://localhost:7000/api/v1/create",
         formdata
@@ -44,6 +68,7 @@ const AddContacts = () => {
   };
   const handleFileUpload = async (e: any) => {
     const file = e.target.files[0];
+    console.log(file);
   };
   return (
     <div className="mt-16">
@@ -140,7 +165,7 @@ const AddContacts = () => {
             required
             name="photourl"
             value={formdata.photourl}
-            onChange={handleChange}
+            onChange={handleFileUpload}
           />
         </div>
         <button
