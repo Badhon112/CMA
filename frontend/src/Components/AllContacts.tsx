@@ -34,8 +34,11 @@ const AllContacts = () => {
       .catch((error) => {
         toast.error("Something Went Wrong");
       });
+    window.location.reload();
   };
-
+  const handleFileUpload = async (e: any) => {
+    const file = e.target.files[0];
+  };
   return (
     <div className="grid lg:grid-cols-3 m-3 ">
       {alldata

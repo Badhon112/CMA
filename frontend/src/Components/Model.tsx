@@ -44,7 +44,7 @@ const Model: React.FC<Props> = ({ id }) => {
       .catch((error) => {
         toast.error("Error in Fetching Data");
       });
-    //     console.log(getsingledata);
+        // console.log(getsingledata);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
