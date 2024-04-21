@@ -2,14 +2,14 @@ import express, { Request, Response } from "express";
 import { validate } from "../../middleware/validate_middleware";
 import { contractValidator } from "../../validators/Contract_validator";
 import User from "../../model/users";
-import cloudinary from "cloudinary";
-import multer from "multer";
-import { File } from "buffer";
+// import cloudinary from "cloudinary";
+// import multer from "multer";
+// import { File } from "buffer";
 
-const storage = multer.memoryStorage();
-const uploader = multer({
-  storage: storage,
-});
+// const storage = multer.memoryStorage();
+// const uploader = multer({
+//   storage: storage,
+// });
 
 const router = express.Router();
 
@@ -58,7 +58,7 @@ router.route("/create").post(
         photourl,
       });
       await user.save();
-      return res.status(200).send({ msg: "User Registerd Ok" });
+      return res.status(200).send({ msg: "User Registerd Succefull" });
     } catch (error) {
       res.status(404).json({ msg: "Error While Creating", error });
     }

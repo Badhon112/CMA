@@ -206,18 +206,12 @@ const AddContacts: React.FC = () => {
     address: "",
     photourl: "",
   });
-  const present_key = import.meta.env.CUP;
-  const CLOUDNAME = import.meta.env.CLOUDNAME;
-  console.log(present_key, CLOUDNAME);
-
-  const [imageUrl, setImageUrl] = useState<string>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = e.target.files && e.target.files[0];
-
     const formDataimage = new FormData();
     if (file) {
       formDataimage.append("file", file);
@@ -231,13 +225,9 @@ const AddContacts: React.FC = () => {
           formDataimage
         )
         .then((res) => {
-          setImageUrl(res.data.secure_url);
-          console.log(imageUrl);
-
-          // formdata.photourl:imageUrl as string
           setFormdata((prevedata) => ({
             ...prevedata,
-            imageUrl,
+            [e.target.name]: res.data.secure_url,
           }));
         })
         .catch((error) => {
@@ -369,7 +359,7 @@ const AddContacts: React.FC = () => {
           <button
             type="submit"
             disabled
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-blue-300 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Submit
           </button>

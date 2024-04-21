@@ -36,9 +36,16 @@ const AllContacts = () => {
       });
     window.location.reload();
   };
-  const handleFileUpload = async (e: any) => {
-    const file = e.target.files[0];
-  };
+  // const handleFileUpload = async (e: any) => {
+  //   const file = e.target.files[0];
+  // };
+  if (alldata?.length === 0) {
+    return (
+      <div className="h-screen flex items-center justify-center text-4xl">
+        User dosn,t exists
+      </div>
+    );
+  }
   return (
     <div className="grid lg:grid-cols-3 m-3 ">
       {alldata
@@ -48,11 +55,13 @@ const AllContacts = () => {
                 key={item._id}
                 className="max-w-sm rounded overflow-hidden items-center shadow-lg w-[350px]"
               >
-                <img
-                  className="w-28 h-28 flex items-center justify-center rounded-full m-3"
-                  src={images}
-                  alt="Sunset in the mountains"
-                />
+                <div className="flex items-center justify-center ">
+                  <img
+                    className="w-28 h-28 rounded-full m-3 object-center"
+                    src={item.photourl}
+                    alt="Sunset in the mountains"
+                  />
+                </div>
                 <div className="px-6 pt-4  items-center">
                   <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                     Name : {item.name}
